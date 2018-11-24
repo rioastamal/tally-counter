@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+<title>Tally Counter</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="description" content="Fast and simple tally counter">
+<meta property="og:title" content="Tally Counter">
+<meta property="og:description" content="Fast and simple tally counter">
+<meta property="og:url" content="https://rioastamal.net/tally-counter/">
+<meta property="og:image" content="https://s3.amazonaws.com/rioastamal-assets/tally-counter/favicon-1024.png">
+<style>
+html,
+body {
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+}
+html {
+    display: table;
+}
+body {
+    background-color: #222;
+    color: #a9a9a9;
+    display: table-cell;
+    box-sizing: border-box;
+    vertical-align: middle;
+    font-family: "Lucida Console", "Monaco", "Monospace", "Sans-serif";
+}
+#counter {
+    margin: 0 auto;
+    font-size: 8em;
+    width: 99%;
+    text-align: center;
+    overflow: hidden;
+}
+#reset {
+    position: absolute;
+    right: 0;
+    top: 0;
+    font-size: 1em;
+    color: inherit;
+    text-decoration: none;
+    padding: 0.2em 0.5em;
+    background-color: #333;
+    z-index: 1000;
+}
+#reset:visited {
+    color: inherit;
+}
+</style>
+</head>
+<body>
+<div id="counter">0</div>
+<a id="reset" href="#">Reset</a></div>
+<script>
+/**
+ * Write cookie and set the expiration to forever. It will only write once.
+ *
+ * @param String name
+ * @param String value
+ * @param Boolean checkWithValue
+ * @return void
+ */
+function writePermanentCookie(name, value)
+{
+    var currentYear = (new Date()).getFullYear() + 3;
+    var expires = (new Date(currentYear, 12, 12)).toUTCString();
+    document.cookie = name + '=' + value + ';path=/;expires=' + expires;
+}
+
+var counter = document.getElementById('counter');
+function increment()
+{
+    counter.innerHTML = parseInt(counter.innerHTML) + 1;
+    writePermanentCookie('lastCounter', counter.innerHTML);
+}
+
+document.onmousedown = function(e)
+{
+    e.preventDefault();
+    return false;
+}
+
+document.onkeypress = function(e)
+{
+    increment();
+}
+
+document.onclick = function(e)
+{
+    increment();
+}
+
+document.getElementById('reset').onclick = function(e)
+{
+    e.preventDefault();
+    counter.innerHTML = -1;
+}
+
+window.onload = function(e)
+{
+    var lastValue = document.cookie.replace(/(?:(?:^|.*;\s*)lastCounter\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+    if (lastValue) {
+        counter.innerHTML = lastValue;
+    }
+}
+</script>
+</body>
+</html>
